@@ -179,4 +179,3 @@ int main(int ac, char **av)
 		printf("%08x", result.state[i]);
 	printf("\n");
 }
-
