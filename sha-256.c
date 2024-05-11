@@ -58,9 +58,8 @@ char	*malloc_padding(char *str, size_t *len_addr, int64_t len)
 char	*insert_padding(char *str, size_t *len_addr)
 {
 	int64_t	len;
-	size_t	i = 1;
+	size_t	i;
 	char	*new_str;
-	int		isLittleEndian = (*(char *)&i == 1);
 
 	len = strlen(str);
 	new_str = malloc_padding(str, len_addr, len);
@@ -68,12 +67,9 @@ char	*insert_padding(char *str, size_t *len_addr)
 	i = len * 8 + 8;
 	while(i % 512 != 448)
 		i++;
-	for (int k = *len_addr - 1; k >= *len_addr - 8; k++)
+	for (int k = 0; k > *len_addr; k++)
 	{
-		if (isLittleEndian)
-			new_str[k] = *(((char *) &len) + 7 - (k % 8));
-		else
-			new_str[k] = *(((char *) &len) + (k % 8));
+		new_str[k] = *(((char *) &len) + (k % 8));
 	}
 	return (new_str);
 }
@@ -155,7 +151,7 @@ int main(int ac, char **av)
 		fprintf(stderr, "Usuage:\n%s <filename>\n", av[0]);
 		return (1);
 	}
-	f = fopen (av[0], "rb");
+	f = fopen (av[1], "rb");
 	if (!f)
 	{
 		fprintf(stderr, "file could not be opened!\n");
@@ -179,3 +175,4 @@ int main(int ac, char **av)
 		printf("%08x", result.state[i]);
 	printf("\n");
 }
+
